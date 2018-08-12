@@ -3,6 +3,18 @@ import express from 'express';
 var app = express();
 import bodyParser from 'body-parser';
 import {convertNumbersToT9} from './t9-converter';
+import wordCreator from "./utils/wordCreator";
+import connectToDb from './models/dbConnection';
+import {getWordsByKey} from './services/wordService';
+
+connectToDb(
+    success => {
+        console.log("Connected!!!!");
+        wordCreator();
+    },
+    error => console.log("Connection Error!!!!"),
+);
+
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -36,8 +48,15 @@ router.route('/convertWordsToTNine')
 
 // create a t9 (accessed at GET http://localhost:8080/api/v1/convertWordsToTNine)
     .post(function (req, res) {
-        const result = convertNumbersToT9(req.body.message);
-        res.json({words: result});
+        getWordsByKey(req.body.message).then(wordList => {
+            if (wordList.length > 0) {
+                res.json({words: wordList});
+            } else {
+                const result = convertNumbersToT9(req.body.message);
+                res.json({words: result});
+            }
+        });
+
     });
 
 // REGISTER OUR ROUTES -------------------------------
