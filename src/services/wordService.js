@@ -28,9 +28,14 @@ const createWords = (list) => {
 const getWordsByKey = (key = 0) => {
     return Word.find({key: key}, (err, list) => {
         if (err) throw err;
-
-        console.log(list);
         return list;
+    }).then(response => {
+        if (response.length > 0) {
+            console.log(response[0].words);
+            return response[0].words;
+        } else {
+            return [];
+        }
     })
 };
 
