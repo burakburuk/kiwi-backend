@@ -14,7 +14,7 @@ wordMap.set('wxyz', 9);
 
 let wordsFromFile = [];
 
-const getKeyFromWord = (word) => {
+export const getKeyFromWord = (word) => {
     let keys = "";
     console.log("Key Generation started for " + word);
     for (let i = 0; i < word.length; i++) {
@@ -29,7 +29,7 @@ const getKeyFromWord = (word) => {
     return parseInt(keys);
 };
 
-const readWords = (path) => {
+export const readWords = (path) => {
     var lineReader = require('readline').createInterface({
         input: fs.createReadStream(path)
     });
